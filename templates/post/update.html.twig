@@ -9,7 +9,7 @@
 
     {% include 'post/_post_header.html.twig' %}
 
-    {{ form(post_form) }}
+    {% include 'post/_form.html.twig' with {'button_label': 'Mettre à jour'} %}
 {% endblock %}
 
 

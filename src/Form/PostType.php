@@ -30,9 +30,7 @@ class PostType extends AbstractType
                     'placeholder' => 'Rédigez votre article.'
                 ]
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Valider !'
-            ]);
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
