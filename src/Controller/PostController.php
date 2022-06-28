@@ -58,4 +58,38 @@ class PostController extends AbstractController
             'post_form' => $postForm->createView()
         ]);
     }
+
+    /**
+     * @Route("/{post}/update", name="post_update", methods={"GET", "POST"}, requirements={"post": "\d+"})
+     */
+    public function update(Post $post, Request $request, PostRepository $postRepository): Response
+    {
+        $postForm = $this->createForm(PostType::class, $post);
+
+        $postForm->handleRequest($request);
+
+        if ($postForm->isSubmitted() && $postForm->isValid()) {
+            $postRepository->add($post, true);
+
+            $this->addFlash('success', 'Votre article a bien été mis à jour !');
+
+            return $this->redirectToRoute('post_show', ['post' => $post->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('post/update.html.twig', [
+            'post_form' => $postForm->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/{post}/delete", name="post_delete", methods={"GET"}, requirements={"post": "\d+"})
+     */
+    public function delete(Post $post, PostRepository $postRepository): Response
+    {
+        $postRepository->remove($post, true);
+
+        $this->addFlash('warning', 'L\'article a été supprimé !');
+
+        return $this->redirectToRoute('post_index');
+    }
 }
