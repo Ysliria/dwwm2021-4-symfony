@@ -1,9 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}{{ post.title }}{% endblock %}
 
 {% block body %}
-<h1>{{ post.title }}</h1>
+    <h1>{{ post.title }} <small class="text-muted">{{ post.createdAt | date('d/m/Y') }}</small></h1>
+
+    <hr>
+
+    <article>
+        {{ post.content }}
+    </article>
 {% endblock %}
 
 
