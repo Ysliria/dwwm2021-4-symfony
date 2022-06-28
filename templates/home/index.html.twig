@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <h1>Bienvenu !</h1>
+
+    <div class="row">
+        {% for post in posts %}
+            <div class="card col-4">
+                <div class="card-body">
+                    <h4 class="card-title">{{ post.title }}</h4>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ post.createdAt | date('d/m/Y') }}</h6>
+                    <p class="card-text">{{ post.content | slice(0, 100) }}</p>
+                    <a href="#" class="card-link">Détails</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
