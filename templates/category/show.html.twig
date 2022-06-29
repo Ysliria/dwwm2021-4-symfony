@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block body %}
+    <h1>{{ category.name }}</h1>
+
+    <hr>
+
+    <table class="table table-striped table-hover">
+        <caption>Liste des articles</caption>
+
+        <thead>
+        <tr>
+            <th scope="col" class="col-3">Titre</th>
+            <th scope="col">Contenu</th>
+            <th scope="col">Ajouté le</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for post in category.posts | sort((a, b) => b.createdAt <=> a.createdAt) %}
+            <tr>
+                <th scope="row">{{ post.title }}</th>
+                <td>{{ post.content | slice(0, 100) }}</td>
+                <td>{{ post.createdAt | date('d/m/Y') }}</td>
+                <td>
+                    <a href="{{ path('post_show', {'post': post.id}) }}" class="btn btn-info"><span class="fa-solid fa-magnifying-glass"></span></a>
+                    <a href="{{ path('post_update', {'post': post.id}) }}" class="btn btn-warning"><span class="fa-solid fa-pencil"></span></a>
+                    <a href="{{ path('post_delete', {'post': post.id}) }}" class="btn btn-danger"><span class="fa-solid fa-trash"></span></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+
