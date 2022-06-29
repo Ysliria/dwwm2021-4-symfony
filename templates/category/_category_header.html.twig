@@ -1,0 +1,8 @@
+<a href="{{ path('category_index') }}" class="btn btn-secondary"><span class="fa-solid fa-arrow-left"></span></a>
+
+{% if category is defined %}
+    <div class="float-end">
+        <a href="{{ path('category_update', {'category': category.id}) }}" class="btn btn-warning"><span class="fa-solid fa-pencil"></span></a>
+        <a href="{{ path('category_delete', {'category': category.id}) }}" class="btn btn-danger"><span class="fa-solid fa-trash"></span></a>
+    </div>
+{% endif %}

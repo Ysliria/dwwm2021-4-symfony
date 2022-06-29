@@ -18,7 +18,7 @@ class RegistrationController extends AbstractController
      */
     public function index(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher): Response
     {
-        $user = new User();
+        $user             = new User();
         $registrationForm = $this->createForm(RegistrationFormType::class, $user);
 
         $registrationForm->handleRequest($request);

@@ -26,13 +26,23 @@ class Post
      *     max=255,
      *     maxMessage="Votre titre est trop long !"
      * )
+     * @Assert\NotBlank(
+     *     message="Vous devez saisir un titre !"
+     * )
      */
     private string $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(
+     *     min=250
+     *     minMessage="Vous devez saisir un minimum de texte pour votre article!"
+     * )
+     * @Assert\NotBlank(
+     *     message="Vous devez écrire un article !"
+     * )
      */
-    private ?string $content;
+    private string $content;
 
     /**
      * @ORM\Column(type="datetime_immutable")
@@ -42,7 +52,7 @@ class Post
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts")
      */
-    private $category;
+    private ?Category $category;
 
     public function getId(): ?int
     {

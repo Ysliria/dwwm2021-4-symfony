@@ -11,12 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/post")
+ * @Route("/post", name="post_")
  */
 class PostController extends AbstractController
 {
     /**
-     * @Route("/", name="post_index", methods={"GET"})
+     * @Route("/", name="index", methods={"GET"})
      */
     public function index(PostRepository $postRepository): Response
     {
@@ -26,7 +26,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{post}/show", name="post_show", methods={"GET"}, requirements={"post": "\d+"})
+     * @Route("/{post}/show", name="show", methods={"GET"}, requirements={"post": "\d+"})
      */
     public function show(Post $post): Response
     {
@@ -36,7 +36,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/add", name="post_add", methods={"GET", "POST"})
+     * @Route("/add", name="add", methods={"GET", "POST"})
      */
     public function add(Request $request, PostRepository $postRepository): Response
     {
@@ -60,7 +60,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{post}/update", name="post_update", methods={"GET", "POST"}, requirements={"post": "\d+"})
+     * @Route("/{post}/update", name="update", methods={"GET", "POST"}, requirements={"post": "\d+"})
      */
     public function update(Post $post, Request $request, PostRepository $postRepository): Response
     {
@@ -82,7 +82,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{post}/delete", name="post_delete", methods={"GET"}, requirements={"post": "\d+"})
+     * @Route("/{post}/delete", name="delete", methods={"GET"}, requirements={"post": "\d+"})
      */
     public function delete(Post $post, PostRepository $postRepository): Response
     {
@@ -90,6 +90,6 @@ class PostController extends AbstractController
 
         $this->addFlash('warning', 'L\'article a été supprimé !');
 
-        return $this->redirectToRoute('post_index');
+        return $this->redirectToRoute('post_index', [], Response::HTTP_SEE_OTHER);
     }
 }

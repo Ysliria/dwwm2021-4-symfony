@@ -11,12 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/category")
+ * @Route("/category", name="category_")
  */
 class CategoryController extends AbstractController
 {
     /**
-     * @Route("/", name="category_index")
+     * @Route("/", name="index", methods={"GET"})
      */
     public function index(CategoryRepository $categoryRepository): Response
     {
@@ -26,7 +26,7 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/{category}/show", name="category_show")
+     * @Route("/{category}/show", name="show", methods={"GET"}, requirements={"category": "\d+"})
      */
     public function show(Category $category): Response
     {
@@ -36,7 +36,7 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/add", name="category_add")
+     * @Route("/add", name="add", methods={"GET", "POST"})
      */
     public function add(Request $request, CategoryRepository $categoryRepository): Response
     {
@@ -59,7 +59,7 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/{category}/update", name="category_update")
+     * @Route("/{category}/update", name="update", methods={"GET", "POST"}, requirements={"category": "\d+"})
      */
     public function update(Category $category, Request $request, CategoryRepository $categoryRepository): Response
     {
@@ -78,5 +78,17 @@ class CategoryController extends AbstractController
         return $this->render('category/update.html.twig', [
             'category_form' => $categoryForm->createView()
         ]);
+    }
+
+    /**
+     * @Route("/{category}/delete", name="delete", methods={"GET"}, requirements={"category": "\d+"})
+     */
+    public function delete(Category $category, CategoryRepository $categoryRepository): Response
+    {
+        $categoryRepository->remove($category, true);
+
+        $this->addFlash('warning', 'La catégorie a été supprimée !');
+
+        return $this->redirectToRoute('category_index', [], Response::HTTP_SEE_OTHER);
     }
 }

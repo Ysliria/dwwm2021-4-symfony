@@ -26,7 +26,7 @@
                 <td>
                     <a href="{{ path('category_show', {'category': category.id}) }}" class="btn btn-info"><span class="fa-solid fa-magnifying-glass"></span></a>
                     <a href="{{ path('category_update', {'category': category.id}) }}" class="btn btn-warning"><span class="fa-solid fa-pencil"></span></a>
-                    <a href="" class="btn btn-danger"><span class="fa-solid fa-trash"></span></a>
+                    <a href="{{ path('category_delete', {'category': category.id}) }}" class="btn btn-danger"><span class="fa-solid fa-trash"></span></a>
                 </td>
             </tr>
         {% endfor %}

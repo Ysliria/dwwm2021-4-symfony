@@ -6,6 +6,7 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
@@ -17,17 +18,26 @@ class Category
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=25)
+     * @Assert\Length(
+     *     min=2,
+     *     max=25,
+     *     minMessage="Le nom de votre catégorie doit faire au moins {{ limit }} caractères !",
+     *     maxMessage="Le nom de votre catégorie est trop long, il exède {{ limit }} caractères !"
+     * )
+     * @Assert\NotBlank(
+     *     message="Vous devez saisir un nom pour votre catégorie !"
+     * )
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="category")
      */
-    private $posts;
+    private Collection $posts;
 
     public function __construct()
     {
