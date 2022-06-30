@@ -7,7 +7,9 @@
 
     <hr>
 
-    <a href="{{ path('post_add') }}" class="btn btn-success float-end mb-3"><span class="fa-solid fa-plus"></span></a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('post_add') }}" class="btn btn-success float-end mb-3"><span class="fa-solid fa-plus"></span></a>
+    {% endif %}
 
     {% include 'partials/_posts_array.html.twig' with {'posts': posts} %}
 {% endblock %}

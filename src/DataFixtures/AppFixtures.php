@@ -22,7 +22,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create();
+        $faker   = Factory::create();
         $slugger = new AsciiSlugger();
 
         /* Catégories */
@@ -41,12 +41,11 @@ class AppFixtures extends Fixture
         for ($a = 0; $a < 50; $a++) {
             $post = new Post();
             $post
-                ->setTitle($faker->realText(25,5))
+                ->setTitle($faker->realText(25, 5))
                 ->setContent($faker->realText(500, 5))
                 ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-2 years', 'now')))
                 ->setSlug(strtolower($slugger->slug($post->getTitle())))
-                ->setCategory($categories[random_int(0, count($categories)-1)])
-            ;
+                ->setCategory($categories[random_int(0, count($categories) - 1)]);
 
             $manager->persist($post);
         }
@@ -58,8 +57,7 @@ class AppFixtures extends Fixture
                 ->setFirstname($faker->firstName)
                 ->setLastname($faker->lastName)
                 ->setEmail($faker->email)
-                ->setPassword($this->passwordHasher->hashPassword($user, 'Test1234*'))
-            ;
+                ->setPassword($this->passwordHasher->hashPassword($user, 'Test1234*'));
 
             $manager->persist($user);
         }
@@ -71,8 +69,7 @@ class AppFixtures extends Fixture
             ->setLastname('AUGER')
             ->setEmail('mauger@cefim.eu')
             ->setRoles(['ROLE_ADMIN'])
-            ->setPassword($this->passwordHasher->hashPassword($administrateur, 'Test1234*'))
-        ;
+            ->setPassword($this->passwordHasher->hashPassword($administrateur, 'Test1234*'));
 
         $manager->persist($administrateur);
 

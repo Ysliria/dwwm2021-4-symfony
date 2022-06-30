@@ -14,15 +14,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('post_index') }}">Articles</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('category_index') }}">Catégories</a>
-                    </li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('category_index') }}">Catégories</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('home_contact') }}">Contact</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
+                    {#
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                         <div class="dropdown-menu">
@@ -33,10 +33,15 @@
                             <a class="dropdown-item" href="#">Separated link</a>
                         </div>
                     </li>
+                    #}
                 </ul>
                 <form class="d-flex">
-                    <input class="form-control me-sm-2" type="text" placeholder="Search">
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    {% if app.user %}
+                        <a href="{{ path('app_logout') }}" class="btn btn-warning">Se déconnecter</a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="btn btn-dark">Se connecter</a>
+                        <a href="{{ path('registration_index') }}" class="btn btn-secondary">S'inscrire</a>
+                    {% endif %}
                 </form>
             </div>
         </div>

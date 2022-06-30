@@ -40,6 +40,7 @@ class PostController extends AbstractController
 
     /**
      * @Route("/add", name="add", methods={"GET", "POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function add(Request $request, PostRepository $postRepository): Response
     {
@@ -68,6 +69,7 @@ class PostController extends AbstractController
 
     /**
      * @Route("/{post}/update", name="update", methods={"GET", "POST"}, requirements={"post": "\d+"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function update(Post $post, Request $request, PostRepository $postRepository): Response
     {

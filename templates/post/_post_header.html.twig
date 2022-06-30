@@ -1,6 +1,6 @@
 <a href="{{ path('post_index') }}" class="btn btn-secondary"><span class="fa-solid fa-arrow-left"></span></a>
 
-{% if post is defined %}
+{% if post is defined and is_granted('ROLE_ADMIN') %}
     <div class="float-end">
         <a href="{{ path('post_update', {'post': post.id}) }}" class="btn btn-warning"><span class="fa-solid fa-pencil"></span></a>
         <a href="{{ path('post_delete', {'post': post.id}) }}" class="btn btn-danger"><span class="fa-solid fa-trash"></span></a>
