@@ -35,7 +35,7 @@ class Post
     /**
      * @ORM\Column(type="text")
      * @Assert\Length(
-     *     min=250
+     *     min=250,
      *     minMessage="Vous devez saisir un minimum de texte pour votre article!"
      * )
      * @Assert\NotBlank(
@@ -53,6 +53,11 @@ class Post
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="posts")
      */
     private ?Category $category;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $slug;
 
     public function getId(): ?int
     {
@@ -103,6 +108,18 @@ class Post
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

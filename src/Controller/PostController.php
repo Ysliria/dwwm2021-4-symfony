@@ -5,10 +5,13 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 /**
  * @Route("/post", name="post_")
@@ -47,6 +50,10 @@ class PostController extends AbstractController
 
         if ($postForm->isSubmitted() && $postForm->isValid()) {
             $post->setCreatedAt(new \DateTimeImmutable('now'));
+
+            $slugger = new AsciiSlugger();
+            $post->setSlug(strtolower($slugger->slug($post->getTitle())));
+
             $postRepository->add($post, true);
 
             $this->addFlash('success', 'Votre article a bien été enregistré !');
@@ -83,6 +90,7 @@ class PostController extends AbstractController
 
     /**
      * @Route("/{post}/delete", name="delete", methods={"GET"}, requirements={"post": "\d+"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Post $post, PostRepository $postRepository): Response
     {
