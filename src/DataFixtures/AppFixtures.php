@@ -25,31 +25,6 @@ class AppFixtures extends Fixture
         $faker   = Factory::create();
         $slugger = new AsciiSlugger();
 
-        /* Catégories */
-        $categories = [];
-
-        for ($c = 0; $c < 10; $c++) {
-            $category = new Category();
-            $category->setName($faker->realText(25, 5));
-
-            $categories[] = $category;
-
-            $manager->persist($category);
-        }
-
-        /* Articles */
-        for ($a = 0; $a < 50; $a++) {
-            $post = new Post();
-            $post
-                ->setTitle($faker->realText(25, 5))
-                ->setContent($faker->realText(500, 5))
-                ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-2 years', 'now')))
-                ->setSlug(strtolower($slugger->slug($post->getTitle())))
-                ->setCategory($categories[random_int(0, count($categories) - 1)]);
-
-            $manager->persist($post);
-        }
-
         /* Utilisateurs */
         for ($u = 0; $u < 5; $u++) {
             $user = new User();
@@ -72,6 +47,33 @@ class AppFixtures extends Fixture
             ->setPassword($this->passwordHasher->hashPassword($administrateur, 'Test1234*'));
 
         $manager->persist($administrateur);
+
+        /* Catégories */
+        $categories = [];
+
+        for ($c = 0; $c < 10; $c++) {
+            $category = new Category();
+            $category->setName($faker->realText(25, 5));
+
+            $categories[] = $category;
+
+            $manager->persist($category);
+        }
+
+        /* Articles */
+        for ($a = 0; $a < 50; $a++) {
+            $post = new Post();
+            $post
+                ->setTitle($faker->realText(25, 5))
+                ->setContent($faker->realText(500, 5))
+                ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-2 years', 'now')))
+                ->setSlug(strtolower($slugger->slug($post->getTitle())))
+                ->setCategory($categories[random_int(0, count($categories) - 1)])
+                ->setAuthor($administrateur)
+            ;
+
+            $manager->persist($post);
+        }
 
         $manager->flush();
     }
