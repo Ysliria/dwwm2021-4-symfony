@@ -50,10 +50,11 @@ class PostController extends AbstractController
         $postForm->handleRequest($request);
 
         if ($postForm->isSubmitted() && $postForm->isValid()) {
-            $post->setCreatedAt(new \DateTimeImmutable('now'));
-
             $slugger = new AsciiSlugger();
+
             $post->setSlug(strtolower($slugger->slug($post->getTitle())));
+            $post->setCreatedAt(new \DateTimeImmutable('now'));
+            $post->setAuthor($this->getUser());
 
             $postRepository->add($post, true);
 
