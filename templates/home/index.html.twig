@@ -3,18 +3,35 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <h1>Bienvenu !</h1>
+    <h1>Mon super blog avec plein de superbes articles trop beau !</h1>
 
-    <div class="row">
+    <section class="row mt-5">
+        <div id="homeCaroussel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://picsum.photos/id/420/1920/1080?grayscale" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://picsum.photos/id/555/1920/1080?grayscale" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://picsum.photos/id/203/1920/1080?grayscale" class="d-block w-100" alt="...">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="row mt-5 mb-5">
         {% for post in posts %}
             <div class="card col-4">
                 <div class="card-body">
                     <h4 class="card-title">{{ post.title }}</h4>
                     <h6 class="card-subtitle mb-2 text-muted">{{ post.createdAt | date('d/m/Y') }}</h6>
                     <p class="card-text">{{ post.content | slice(0, 100) }}</p>
-                    <a href="#" class="card-link">Détails</a>
+                    <a href="{{ path('post_show', {'post': post.id}) }}" class="card-link">Détails</a>
                 </div>
             </div>
         {% endfor %}
-    </div>
+    </section>
+
 {% endblock %}

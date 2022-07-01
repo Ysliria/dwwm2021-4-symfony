@@ -3,15 +3,48 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block body %}
-    <h1>{{ post.title }} <small class="text-muted">{{ post.createdAt | date('d/m/Y') }}</small></h1>
+    <h1>{{ post.title }}</h1>
 
     <hr>
 
     {% include 'post/_post_header.html.twig' %}
 
-    <article>
-        {{ post.content }}
+    <article class="row mt-3 fs-3">
+        <p>
+            {{ post.content }}
+        </p>
+
+        <p class="text-end">
+            ~ {{ post.author.firstname }} {{ post.author.lastname }} - <small class="text-muted">{{ post.createdAt | date('d/m/Y') }}</small>
+        </p>
     </article>
+
+    <hr>
+
+    {% if app.user %}
+        <section class="row mt-3">
+            {{ form(comment_form) }}
+        </section>
+        <hr>
+    {% endif %}
+    
+    <section class="row mt-3 mb-5">
+        {% for comment in post.comments | sort((a, b) => b.createdAt <=> a.createdAt) %}
+            {% set i = loop.index %}
+
+            <div class="{% if i is odd %}text-end bg-secondary offset-2 col-10{% else %}col-10{% endif %} mt-3">
+                <figure>
+                    <blockquote class="blockquote">
+                        <p class="mb-0">{{ comment.content }}</p>
+                    </blockquote>
+                    <figcaption class="blockquote-footer">
+                        {{ comment.createdAt | date('d/m/Y') }} - <cite
+                                title="Author">{{ comment.author.firstname }} {{ comment.author.lastname | upper }}</cite>
+                    </figcaption>
+                </figure>
+            </div>
+        {% endfor %}
+    </section>
 {% endblock %}
 
 

@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -26,6 +27,8 @@ class AppFixtures extends Fixture
         $slugger = new AsciiSlugger();
 
         /* Utilisateurs */
+        $users = [];
+
         for ($u = 0; $u < 5; $u++) {
             $user = new User();
             $user
@@ -33,6 +36,8 @@ class AppFixtures extends Fixture
                 ->setLastname($faker->lastName)
                 ->setEmail($faker->email)
                 ->setPassword($this->passwordHasher->hashPassword($user, 'Test1234*'));
+
+            $users[] = $user;
 
             $manager->persist($user);
         }
@@ -61,6 +66,8 @@ class AppFixtures extends Fixture
         }
 
         /* Articles */
+        $posts = [];
+
         for ($a = 0; $a < 50; $a++) {
             $post = new Post();
             $post
@@ -69,10 +76,23 @@ class AppFixtures extends Fixture
                 ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-2 years', 'now')))
                 ->setSlug(strtolower($slugger->slug($post->getTitle())))
                 ->setCategory($categories[random_int(0, count($categories) - 1)])
-                ->setAuthor($administrateur)
-            ;
+                ->setAuthor($administrateur);
+
+            $posts[] = $post;
 
             $manager->persist($post);
+        }
+
+        /* Commentaires */
+        for ($c = 0; $c < 250; $c++) {
+            $comment     = new Comment();
+            $comment
+                ->setPost($posts[random_int(0, count($posts) - 1)])
+                ->setAuthor($users[random_int(0, count($users) - 1)])
+                ->setContent($faker->realText())
+                ->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('now', '+7 days')));
+
+            $manager->persist($comment);
         }
 
         $manager->flush();

@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Form\CommentType;
 use App\Form\PostType;
+use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,12 +32,31 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{post}/show", name="show", methods={"GET"}, requirements={"post": "\d+"})
+     * @Route("/{post}/show", name="show", methods={"GET", "POST"}, requirements={"post": "\d+"})
      */
-    public function show(Post $post): Response
+    public function show(Post $post, Request $request, CommentRepository $commentRepository): Response
     {
+        $comment     = new Comment();
+        $commentForm = $this->createForm(CommentType::class, $comment);
+
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment
+                ->setAuthor($this->getUser())
+                ->setPost($post)
+                ->setCreatedAt(new \DateTimeImmutable('now'));
+
+            $commentRepository->add($comment, true);
+
+            $this->addFlash('success', 'Votre commentaire a bien été enregistré !');
+
+            return $this->redirectToRoute('post_show', ['post' => $post->getId()], Response::HTTP_SEE_OTHER);
+        }
+
         return $this->render('post/show.html.twig', [
-            'post' => $post
+            'post'         => $post,
+            'comment_form' => $commentForm->createView()
         ]);
     }
 
